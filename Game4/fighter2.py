@@ -20,6 +20,7 @@ class Fighter():
         self.attack_type = 0
         self.attack_cooldown = 0
         self.attack_sound = sound
+        self.defending = False
         self.hit = False
         self.alive = True
         self.health = 100
@@ -122,10 +123,8 @@ class Fighter():
     #     self.rect.y += dy
     
     def move(self, screen_width, screen_height, target, action=None, attack=0):
-        if action == 'healing potion':
-            pass
         if action == 'defend':
-            pass
+            self.defending = True
         if action == 'attack':
             if attack == 1:
                 self.attack_type = 1
@@ -195,11 +194,13 @@ class Fighter():
     def attack(self, target, attack_type):
         self.attacking = True
         self.attack_sound.play()
-        if attack_type == 1:
-            target.health -= 10
-        elif attack_type == 2:
-            target.health -= 20
+        if not target.defending:
+            if attack_type == 1:
+                target.health -= 10
+            elif attack_type == 2:
+                target.health -= 20
         target.hit = True
+        target.defending = False
         print(self.player)
     
     def update_action(self, new_action):

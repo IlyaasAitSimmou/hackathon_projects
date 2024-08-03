@@ -116,7 +116,6 @@ def draw_health_bar(health, x, y):
 
 Fighter1 = Fighter(1, 200, 110, False, warrior_data, warrior_sheet, warrior_animation_steps, sword_fx)
 Fighter2 = Fighter(2, 700, 110, True, wizard_data, wizard_sheet, wizard_animation_steps, magic_fx)
-test_button = Button(white, red, 100, 70, 100, 100, 'hello', 10, yellow, 10, "assets/fonts/turok.ttf")
 
 # game loop
 run = True
@@ -152,7 +151,11 @@ while run:
                         if action_defend_btn.main_body.collidepoint(event.pos):
                             plyr1_action = 'defend'
                         if plyr1_action_heal_btn.main_body.collidepoint(event.pos):
-                            plyr1_action = 'heal'
+                            if plyr1_potions > 0:
+                                Fighter1.health += 10
+                                plyr1_potions -= 1
+                                turn = 2
+                                plyr1_action = ''
                 # if action_defend_btn.clicked:
                 #     plyr1_action = 'defend'
                 # if plyr1_action_heal_btn.clicked:
@@ -161,10 +164,6 @@ while run:
                     
             if plyr1_action == 'defend':
                 Fighter1.move(screen_width, screen_height, Fighter2, 'defend', 1)
-                turn = 2
-                plyr1_action = ''
-            elif plyr1_action == 'heal':
-                Fighter1.move(screen_width, screen_height, Fighter2, 'heal', 1)
                 turn = 2
                 plyr1_action = ''
             elif plyr1_action == 'attack':
@@ -179,7 +178,6 @@ while run:
                         if attack2_btn.main_body.collidepoint(event.pos):
                             Fighter1.move(screen_width, screen_height, Fighter2, 'attack', 2)
                             turn = 2
-                            print(turn)
                             plyr1_action = ''
                     
         if turn == 2:
@@ -195,7 +193,12 @@ while run:
                         if action_defend_btn.main_body.collidepoint(event.pos):
                             plyr2_action = 'defend'
                         if plyr2_action_heal_btn.main_body.collidepoint(event.pos):
-                            plyr2_action = 'heal'
+                            if plyr2_potions > 0:
+                                Fighter2.health += 10
+                                plyr2_potions -= 1
+                                turn = 1
+                                plyr2_action = ''
+                                plyr2_action_heal_btn = Button((255, 90, 0), red, screen_width/3 - 20, 90, screen_width/3, 490, f'heal ({plyr2_potions} left)', 20, yellow, 10, "assets/fonts/turok.ttf")
 
                 # if action_defend_btn.clicked:
                     
@@ -205,10 +208,6 @@ while run:
                     
             elif plyr2_action == 'defend':
                 Fighter2.move(screen_width, screen_height, Fighter1, 'defend', 1)
-                turn = 1
-                plyr2_action = ''
-            elif plyr2_action == 'heal':
-                Fighter2.move(screen_width, screen_height, Fighter1, 'heal', 1)
                 turn = 1
                 plyr2_action = ''
             elif plyr2_action == 'attack':
@@ -252,7 +251,6 @@ while run:
 
     Fighter1.draw(screen)
     Fighter2.draw(screen)
-    test_button.draw(screen)
 
 
     # check for player defeat
